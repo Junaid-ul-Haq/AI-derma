@@ -1,22 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Skinova
+
+A Next.js application for AI-powered skin disease detection and online consultation.
+
+## Features
+
+- **User Authentication**: Sign up and sign in functionality
+- **Protected Upload**: Users must be logged in to upload images
+- **Professional Landing Page**: Medical-grade UI for healthcare platform
+- **MongoDB Integration**: User data storage with Mongoose
+- **NextAuth.js**: Secure authentication system
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- MongoDB (local or cloud instance)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables in `.env.local`:
+   ```env
+   MONGODB_URI=mongodb://localhost:27017/skin-disease-detection
+   NEXT_PUBLIC_APP_NAME=Skinova
+   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your-secret-key-here-change-in-production
+   ```
+
+4. Start MongoDB service (if using local MongoDB)
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Authentication Flow
+
+1. **Sign Up**: Create a new account at `/auth/signup`
+2. **Sign In**: Log in at `/auth/signin`
+3. **Protected Upload**: Access `/upload` after authentication
+4. **Sign Out**: Use the header button to log out
+
+## Project Structure
+
+```
+app/
+├── api/auth/           # Authentication API routes
+├── auth/               # Sign in/up pages
+├── upload/             # Protected upload page
+components/             # Reusable UI components
+lib/                    # Database and auth configuration
+models/                 # MongoDB schemas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## API Routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `POST /api/auth/signup` - User registration
+- `POST /api/auth/[...nextauth]` - NextAuth.js handler
+- `GET /api/test-db` - Database connection test
+
+## Technologies Used
+
+- **Next.js 16** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **NextAuth.js** - Authentication
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **bcryptjs** - Password hashing
+
+## Development
+
+- Run tests: `npm run build`
+- Lint code: `npm run lint`
+- Start dev server: `npm run dev`
+
+## Future Features
+
+- AI image analysis integration
+- Online consultation system
+- Dermatologist dashboard
+- Advanced user profiles
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
