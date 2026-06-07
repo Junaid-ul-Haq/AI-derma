@@ -63,8 +63,9 @@ const STATUS_STYLE: Record<string, string> = {
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [stats,   setStats]   = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [stats,    setStats]    = useState<Stats | null>(null);
+  const [loading,  setLoading]  = useState(true);
+  const [apiError, setApiError] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') { router.replace('/auth/signin'); return; }
@@ -74,8 +75,15 @@ export default function AdminDashboard() {
         router.replace(role === 'DOCTOR' ? '/doctor/dashboard' : '/user/dashboard');
       } else {
         fetch('/api/admin/stats')
-          .then(r => r.json())
-          .then(d => setStats(d))
+          .then(async r => {
+            const data = await r.json();
+            if (!r.ok || !data.overview) {
+              setApiError(data.error || 'Failed to load dashboard stats.');
+            } else {
+              setStats(data);
+            }
+          })
+          .catch(() => setApiError('Network error — could not reach the server.'))
           .finally(() => setLoading(false));
       }
     }
@@ -89,7 +97,32 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!stats) return null;
+  if (apiError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <DashboardSidebar role="ADMIN" />
+        <div className="md:ml-64 w-full flex items-center justify-center p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-8 max-w-md w-full text-center">
+            <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-red-600 font-semibold text-lg mb-2">Dashboard Error</p>
+            <p className="text-gray-500 text-sm mb-6">{apiError}</p>
+            <button
+              onClick={() => { setApiError(''); setLoading(true); window.location.reload(); }}
+              className="px-6 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats?.overview) return null;
   const { overview, byStatus, payments, perDoctor, recentActivity } = stats;
 
   return (

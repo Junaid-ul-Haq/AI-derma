@@ -8,8 +8,9 @@ import Doctor from '../../../models/Doctor';
 export async function GET(request: NextRequest) {
   try {
     const token = await getAuthJwt(request);
-    const uid   = jwtUserId(token!);
-    if (!token || !uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const uid = jwtUserId(token);
+    if (!uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     await dbConnect();
 
@@ -37,8 +38,9 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const token = await getAuthJwt(request);
-    const uid   = jwtUserId(token!);
-    if (!token || !uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const uid = jwtUserId(token);
+    if (!uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     await dbConnect();
 

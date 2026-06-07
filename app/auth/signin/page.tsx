@@ -28,6 +28,7 @@ export default function SignIn() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState('');
   const [resetPassword, setResetPassword] = useState('');
   const [confirmResetPassword, setConfirmResetPassword] = useState('');
@@ -248,8 +249,8 @@ export default function SignIn() {
       });
 
       if (res.ok) {
-        // OTP verified, now show reset password form
-        setResetPassword('show');
+        setOtpVerified(true);
+        setResetPassword('');
       } else {
         const data = await res.json();
         setError(data.error || 'Invalid OTP');
@@ -594,15 +595,16 @@ export default function SignIn() {
                   </form>
                 ) : (
                   <div className="space-y-4">
-                    {resetPassword === 'show' ? (
+                    {!otpVerified ? (
                       <form onSubmit={(e) => { e.preventDefault(); handleVerifyOTP(); }} className="space-y-4">
+                        <p className="text-white/70 text-sm">OTP sent to <span className="text-white font-medium">{forgotEmail}</span></p>
                         <div>
                           <label className="block text-sm font-medium text-white mb-2">Enter OTP</label>
                           <input
                             type="text"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
-                            className="w-full px-4 py-3 bg-gray-800/90 backdrop-blur-sm border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-blue-500 text-center text-lg tracking-widest"
+                            className="w-full px-4 py-3 bg-gray-800/90 backdrop-blur-sm border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-blue-500 text-center text-2xl tracking-widest font-mono"
                             placeholder="000000"
                             required
                             maxLength={6}
@@ -690,6 +692,9 @@ export default function SignIn() {
                   onClick={() => {
                     setShowForgotPassword(false);
                     setOtpSent(false);
+                    setOtpVerified(false);
+                    setOtp('');
+                    setForgotEmail('');
                     setError('');
                     setResetPassword('');
                     setConfirmResetPassword('');

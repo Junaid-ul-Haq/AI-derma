@@ -2,86 +2,61 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaExclamationTriangle, 
-  FaDollarSign, 
-  FaUserMd, 
-  FaRobot 
-} from 'react-icons/fa';
+import { FaExclamationTriangle, FaDollarSign, FaUserMd, FaRobot } from 'react-icons/fa';
 
-const WhyImportant: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const reasons = [
+  {
+    title:       'Many Diseases Ignored',
+    description: 'Skin conditions are often overlooked or self-treated without proper diagnosis, leading to complications and delayed treatment.',
+    icon:        FaExclamationTriangle,
+    color:       'from-red-500 to-pink-500',
+    bgColor:     'bg-red-50',
+    borderColor: 'border-red-200',
+  },
+  {
+    title:       'Save Time & Money',
+    description: 'Early detection prevents costly treatments and complications, saving both time and financial resources while improving outcomes.',
+    icon:        FaDollarSign,
+    color:       'from-green-500 to-emerald-500',
+    bgColor:     'bg-green-50',
+    borderColor: 'border-green-200',
+  },
+  {
+    title:       'Limited Access',
+    description: 'Not everyone has easy access to qualified dermatologists, especially in remote or underserved areas where healthcare is scarce.',
+    icon:        FaUserMd,
+    color:       'from-blue-500 to-cyan-500',
+    bgColor:     'bg-blue-50',
+    borderColor: 'border-blue-200',
+  },
+  {
+    title:       'AI-Powered Awareness',
+    description: 'AI helps in initial analysis and increases health awareness, making healthcare more accessible to everyone regardless of location.',
+    icon:        FaRobot,
+    color:       'from-purple-500 to-indigo-500',
+    bgColor:     'bg-purple-50',
+    borderColor: 'border-purple-200',
+  },
+];
 
-  const reasons = [
-    {
-      title: 'Many Diseases Ignored',
-      description: 'Skin conditions are often overlooked or self-treated without proper diagnosis, leading to complications and delayed treatment.',
-      icon: FaExclamationTriangle,
-      color: 'from-red-500 to-pink-500',
-      bgColor: 'bg-red-50',
-      borderColor: 'border-red-200',
-    },
-    {
-      title: 'Save Time & Money',
-      description: 'Early detection prevents costly treatments and complications, saving both time and financial resources while improving outcomes.',
-      icon: FaDollarSign,
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
-    },
-    {
-      title: 'Limited Access',
-      description: 'Not everyone has easy access to qualified dermatologists, especially in remote or underserved areas where healthcare is scarce.',
-      icon: FaUserMd,
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
-    },
-    {
-      title: 'AI-Powered Awareness',
-      description: 'AI helps in initial analysis and increases health awareness, making healthcare more accessible to everyone regardless of location.',
-      icon: FaRobot,
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-    },
-  ];
+// Simple fade slide — no 3D transforms, no spring physics
+const slide = {
+  enter: { opacity: 0, x: 50 },
+  center: { opacity: 1, x: 0 },
+  exit:  { opacity: 0, x: -50 },
+};
 
-  // Auto-advance carousel every 4 seconds
+export default function WhyImportant() {
+  const [idx, setIdx] = useState(0);
+
+  // Staggered to 5 000 ms so it doesn't fire at the same tick as HowItWorks
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % reasons.length);
-    }, 4000);
+    const id = setInterval(() => setIdx(i => (i + 1) % reasons.length), 5000);
+    return () => clearInterval(id);
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [reasons.length]);
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-      scale: 0.8,
-      rotateY: direction > 0 ? 45 : -45,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      rotateY: 0,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-      scale: 0.8,
-      rotateY: direction < 0 ? 45 : -45,
-    }),
-  };
+  const r = reasons[idx];
+  const Icon = r.icon;
 
   return (
     <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50">
@@ -90,147 +65,92 @@ const WhyImportant: React.FC = () => {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-8 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Why Early Skin Disease Detection Matters
           </h2>
-          <p className="text-sm md:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
+          <p className="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
             Understanding the importance of early detection can make a significant difference in treatment outcomes and quality of life
           </p>
         </motion.div>
 
-        {/* Carousel Container - Works on both mobile and desktop */}
-        <div className="relative">
-          <div className="relative h-[400px] md:h-[450px] lg:h-[500px] overflow-hidden rounded-2xl">
-            <AnimatePresence mode="wait" custom={1}>
-              <motion.div
-                key={currentIndex}
-                custom={1}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: 'spring', stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.4 },
-                  scale: { duration: 0.4 },
-                  rotateY: { duration: 0.4 },
-                }}
-                className="absolute inset-0"
-              >
-                <div className={`${reasons[currentIndex].bgColor} border-2 ${reasons[currentIndex].borderColor} rounded-2xl shadow-2xl h-full flex flex-col md:flex-row overflow-hidden`}>
-                  {/* Icon Section */}
-                  <div className="flex-shrink-0 w-full md:w-1/3 h-48 md:h-full bg-gradient-to-br from-white/50 to-transparent flex items-center justify-center p-8">
-                    <motion.div
-                      key={currentIndex}
-                      initial={{ scale: 0, rotate: -180 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ 
-                        type: 'spring', 
-                        stiffness: 200, 
-                        damping: 15,
-                        delay: 0.2 
-                      }}
-                      className={`w-32 h-32 md:w-40 md:h-40 rounded-3xl bg-gradient-to-br ${reasons[currentIndex].color} flex items-center justify-center shadow-2xl`}
-                    >
-                      {React.createElement(reasons[currentIndex].icon, {
-                        className: 'w-16 h-16 md:w-20 md:h-20 text-white'
-                      })}
-                    </motion.div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="flex-1 flex flex-col justify-center p-6 md:p-10 lg:p-12">
-                    <motion.div
-                      key={`title-${currentIndex}`}
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 0.3 }}
-                    >
-                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-gray-800">
-                        {reasons[currentIndex].title}
-                      </h3>
-                    </motion.div>
-                    
-                    <motion.p
-                      key={`desc-${currentIndex}`}
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                      className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed"
-                    >
-                      {reasons[currentIndex].description}
-                    </motion.p>
-
-                    {/* Step Indicator */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="mt-6 md:mt-8 flex items-center gap-2"
-                    >
-                      <span className="text-sm md:text-base font-semibold text-gray-500">
-                        {currentIndex + 1} / {reasons.length}
-                      </span>
-                      <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: '0%' }}
-                          animate={{ width: '100%' }}
-                          transition={{ duration: 4, ease: 'linear' }}
-                          className={`h-full bg-gradient-to-r ${reasons[currentIndex].color} rounded-full`}
-                          key={currentIndex}
-                        />
-                      </div>
-                    </motion.div>
+        <div className="relative h-[340px] md:h-[380px] overflow-hidden rounded-2xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={idx}
+              variants={slide}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+              className="absolute inset-0"
+            >
+              <div className={`${r.bgColor} border-2 ${r.borderColor} rounded-2xl shadow-xl h-full flex flex-col md:flex-row overflow-hidden`}>
+                {/* Icon */}
+                <div className="flex-shrink-0 w-full md:w-1/3 h-40 md:h-full flex items-center justify-center p-8 bg-white/30">
+                  <div className={`w-28 h-28 md:w-36 md:h-36 rounded-3xl bg-gradient-to-br ${r.color} flex items-center justify-center shadow-xl`}>
+                    <Icon className="w-14 h-14 md:w-18 md:h-18 text-white" />
                   </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
 
-          {/* Navigation Dots */}
-          <div className="flex justify-center gap-2 md:gap-3 mt-6 md:mt-8">
-            {reasons.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`h-2 md:h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? `w-8 md:w-12 bg-gradient-to-r ${reasons[index].color} shadow-lg`
-                    : 'w-2 md:w-3 bg-gray-300 hover:bg-gray-400'
-                }`}
-                aria-label={`Go to ${reasons[index].title}`}
-              />
-            ))}
-          </div>
+                {/* Content */}
+                <div className="flex-1 flex flex-col justify-center p-6 md:p-10">
+                  <h3 className="text-2xl md:text-4xl font-bold mb-3 md:mb-5 text-gray-800">{r.title}</h3>
+                  <p className="text-base md:text-xl text-gray-600 leading-relaxed">{r.description}</p>
 
-          {/* Previous/Next Buttons (Desktop only) */}
-          <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-4 pointer-events-none">
+                  {/* Progress bar */}
+                  <div className="mt-6 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-gray-400">{idx + 1} / {reasons.length}</span>
+                    <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
+                      <motion.div
+                        key={idx}
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 5, ease: 'linear' }}
+                        className={`h-full bg-gradient-to-r ${r.color} rounded-full`}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Dots */}
+        <div className="flex justify-center gap-2 mt-6">
+          {reasons.map((_, i) => (
             <button
-              onClick={() => goToSlide((currentIndex - 1 + reasons.length) % reasons.length)}
-              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 hover:bg-white shadow-lg flex items-center justify-center text-gray-700 hover:text-blue-600 transition-all hover:scale-110"
-              aria-label="Previous"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={() => goToSlide((currentIndex + 1) % reasons.length)}
-              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 hover:bg-white shadow-lg flex items-center justify-center text-gray-700 hover:text-blue-600 transition-all hover:scale-110"
-              aria-label="Next"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+              key={i}
+              onClick={() => setIdx(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === idx
+                  ? `w-10 bg-gradient-to-r ${reasons[i].color} shadow`
+                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to ${reasons[i].title}`}
+            />
+          ))}
+        </div>
+
+        {/* Prev / Next */}
+        <div className="hidden md:flex justify-between mt-4 px-1">
+          <button
+            onClick={() => setIdx(i => (i - 1 + reasons.length) % reasons.length)}
+            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-md transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <button
+            onClick={() => setIdx(i => (i + 1) % reasons.length)}
+            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-md transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
         </div>
       </div>
     </section>
   );
-};
-
-export default WhyImportant;
+}

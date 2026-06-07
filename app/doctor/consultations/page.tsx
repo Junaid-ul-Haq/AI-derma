@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import DashboardSidebar from '@/components/DashboardSidebar';
 
 interface Consultation {
   _id: string;
@@ -99,21 +100,21 @@ export default function DoctorConsultationsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500" />
+      <div className="min-h-screen bg-gray-50">
+        <DashboardSidebar role="DOCTOR" />
+        <div className="md:ml-64 flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50">
+      <DashboardSidebar role="DOCTOR" />
+      <main className="md:ml-64 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/doctor/dashboard" className="text-gray-400 hover:text-gray-600">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-          </Link>
           <h1 className="text-2xl font-bold text-gray-900">Consultations</h1>
           <span className="ml-auto px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
             {consultations.filter(c => c.status === 'PENDING').length} pending
@@ -234,6 +235,7 @@ export default function DoctorConsultationsPage() {
           </div>
         )}
       </div>
+      </main>
     </div>
   );
 }
