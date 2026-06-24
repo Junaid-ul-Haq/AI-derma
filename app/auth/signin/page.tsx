@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { signIn, getSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function SignIn() {
+function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<'user' | 'doctor'>(searchParams.get('type') === 'doctor' ? 'doctor' : 'user');
-  
+
   // User login state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -308,13 +308,13 @@ export default function SignIn() {
 
   if (needsPasswordSetup) {
     return (
-      <div 
+      <div
         className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative bg-cover bg-center"
         style={{ backgroundImage: `url('/login signup.jpg')` }}
       >
         {/* Light overlay */}
         <div className="absolute inset-0 bg-blue-900/40"></div>
-        
+
         <div className="max-w-md w-full relative z-10">
           {/* Back Button */}
           <div className="mb-4">
@@ -328,7 +328,7 @@ export default function SignIn() {
               <span className="text-sm font-medium">Back to Login</span>
             </button>
           </div>
-          
+
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8">
             <div className="text-center mb-6">
               <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -382,13 +382,13 @@ export default function SignIn() {
   }
 
   return (
-    <div 
+    <div
       className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative bg-cover bg-center"
       style={{ backgroundImage: `url('/login signup.jpg')` }}
     >
       {/* Light overlay */}
       <div className="absolute inset-0 bg-blue-900/40"></div>
-      
+
       <div className="max-w-md w-full relative z-10">
         {/* Back Button */}
         <div className="mb-4">
@@ -709,5 +709,21 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={
+      <div
+        className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
+        style={{ backgroundImage: `url('/login signup.jpg')` }}
+      >
+        <div className="absolute inset-0 bg-blue-900/40" />
+        <div className="relative z-10 text-white text-lg font-medium">Loading...</div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 }

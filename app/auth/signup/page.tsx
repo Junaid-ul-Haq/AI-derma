@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function SignUp() {
+function SignUpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<'user' | 'doctor'>(searchParams.get('type') === 'doctor' ? 'doctor' : 'user');
@@ -175,13 +174,13 @@ export default function SignUp() {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative bg-cover bg-center"
       style={{ backgroundImage: `url('/login signup.jpg')` }}
     >
       {/* Light overlay */}
       <div className="absolute inset-0 bg-blue-900/40"></div>
-      
+
       <div className="max-w-md w-full relative z-10">
         {/* Back Button */}
         <div className="mb-4">
@@ -401,5 +400,21 @@ export default function SignUp() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignUp() {
+  return (
+    <Suspense fallback={
+      <div
+        className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
+        style={{ backgroundImage: `url('/login signup.jpg')` }}
+      >
+        <div className="absolute inset-0 bg-blue-900/40" />
+        <div className="relative z-10 text-white text-lg font-medium">Loading...</div>
+      </div>
+    }>
+      <SignUpContent />
+    </Suspense>
   );
 }
