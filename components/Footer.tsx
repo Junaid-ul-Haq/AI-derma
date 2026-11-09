@@ -1,45 +1,70 @@
-import React from 'react';
+import Link from 'next/link';
+import { siteConfig } from '../lib/site';
+import { CONDITIONS } from '../lib/conditions';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
+            <p className="text-xl font-bold mb-4">{siteConfig.name}</p>
             <p className="text-gray-400">
-              AI-powered skin disease detection and online consultation platform for better health outcomes.
+              Free AI skin disease detection. Upload or take a photo of your skin and get an instant skin
+              health report.
             </p>
+            {siteConfig.contactEmail && (
+              <p className="mt-4 text-gray-400">
+                Email:{' '}
+                <a href={`mailto:${siteConfig.contactEmail}`} className="hover:text-white transition-colors">
+                  {siteConfig.contactEmail}
+                </a>
+              </p>
+            )}
           </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+
+          <nav aria-label="Quick links">
+            <p className="text-lg font-semibold mb-4">Quick Links</p>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+              <li><Link href="/analyze" className="text-gray-400 hover:text-white transition-colors">Analyze Your Skin</Link></li>
+              <li><Link href="/#how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link href="/#faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
             </ul>
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Legal</h4>
+          </nav>
+
+          <nav aria-label="Skin conditions">
+            <p className="text-lg font-semibold mb-4">Skin Conditions</p>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Medical Disclaimer</a></li>
+              {CONDITIONS.slice(0, 5).map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/conditions/${c.slug}`} className="text-gray-400 hover:text-white transition-colors">
+                    {c.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/conditions" className="text-gray-300 hover:text-white transition-colors font-medium">
+                  View all conditions →
+                </Link>
+              </li>
             </ul>
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <div className="space-y-2 text-gray-400">
-              <p>Email: info@skinai.com</p>
-              <p>Phone: +1 (555) 123-4567</p>
-              <p>Address: 123 Health St, Medical City, MC 12345</p>
-            </div>
-          </div>
+          </nav>
+
+          <nav aria-label="Legal">
+            <p className="text-lg font-semibold mb-4">Legal</p>
+            <ul className="space-y-2">
+              <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link href="/medical-disclaimer" className="text-gray-400 hover:text-white transition-colors">Medical Disclaimer</Link></li>
+            </ul>
+          </nav>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-          <p className="text-gray-400">
-            © 2024 {process.env.NEXT_PUBLIC_APP_NAME}. All rights reserved. Not for medical use without professional supervision.
+          <p className="text-gray-400 text-sm">
+            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved. AI results are for
+            information only and are not a medical diagnosis.
           </p>
         </div>
       </div>

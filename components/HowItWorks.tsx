@@ -1,181 +1,104 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const steps = [
   {
-    step: 1, icon: '📸',
-    title: 'Upload Skin Image',
-    description: 'Capture or upload a clear, well-lit image of the affected skin area. Ensure good lighting and focus for the most accurate AI analysis. Our system supports multiple image formats and automatically optimizes them for processing.',
-    image: '/how it works/upload.png.jpg',
+    title: 'Upload or Take a Photo',
+    description:
+      'Choose a clear photo from your gallery, or take one instantly with your phone or laptop camera. Good lighting and focus give the most accurate result.',
+    image: '/how-it-works/upload-skin-photo.jpg',
+    alt: 'Uploading a skin photo for AI analysis',
   },
   {
-    step: 2, icon: '✍️',
-    title: 'Describe Your Symptoms',
-    description: 'Provide detailed information about your symptoms such as itching, redness, pain, swelling, or duration. The more information you share, the better our AI can understand and analyze your condition accurately.',
-    image: '/how it works/describe.jpg',
+    title: 'Add Your Symptoms (Optional)',
+    description:
+      'Tell us where the spot is, how long you have noticed it and any symptoms such as itching, bleeding or changes in size. These details are added to your report for your doctor.',
+    image: '/how-it-works/describe-skin-symptoms.jpg',
+    alt: 'Describing skin symptoms such as itching or redness',
   },
   {
-    step: 3, icon: '🤖',
-    title: 'AI-Powered Analysis',
-    description: 'Our advanced artificial intelligence model processes both the image and symptom data using deep learning algorithms. The AI identifies patterns, compares with medical databases, and generates preliminary insights.',
-    image: '/how it works/AI analysis.jpg',
+    title: 'AI Analyzes the Image',
+    description:
+      'Our VGG19 deep-learning model, trained on 15,444 skin photos, compares your image against 21 skin conditions and healthy skin in seconds.',
+    image: '/how-it-works/ai-skin-image-analysis.jpg',
+    alt: 'AI deep-learning model analysing a skin image',
   },
   {
-    step: 4, icon: '📋',
-    title: 'Review Your Health Report',
-    description: 'Receive a comprehensive AI-generated health report that includes possible conditions, severity assessment, recommended precautions, and suggested next steps.',
-    image: '/how it works/view your AI report.jpg',
+    title: 'Get Your Skin Health Report',
+    description:
+      'See the most likely condition, the top 3 possibilities with confidence scores, a risk level, common signs and recommended next steps.',
+    image: '/how-it-works/ai-skin-health-report.jpg',
+    alt: 'AI-generated skin health report on screen',
   },
   {
-    step: 5, icon: '👨‍⚕️',
-    title: 'Consult with Dermatologist',
-    description: 'If needed, book an online consultation with our certified dermatologists. Share your AI report with the doctor for a more informed discussion and get professional medical advice.',
-    image: '/how it works/doctor-offering-medical-teleconsultation.jpg',
+    title: 'Download & Share with a Dermatologist',
+    description:
+      'Save your report as a PDF or print it, then share it with a dermatologist for a professional diagnosis and treatment plan.',
+    image: '/how-it-works/share-report-with-dermatologist.jpg',
+    alt: 'Sharing an AI skin report with a dermatologist',
   },
 ];
 
-const slide = {
-  enter:  { opacity: 0, x: 50 },
-  center: { opacity: 1, x: 0 },
-  exit:   { opacity: 0, x: -50 },
-};
-
 export default function HowItWorks() {
-  const [idx, setIdx] = useState(0);
-
-  // 4 500 ms — staggered from WhyImportant (5 000 ms) to avoid simultaneous re-renders
-  useEffect(() => {
-    const id = setInterval(() => setIdx(i => (i + 1) % steps.length), 4500);
-    return () => clearInterval(id);
-  }, []);
-
-  const s = steps[idx];
-
   return (
-    <section className="py-12 md:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <section aria-labelledby="how-heading" className="py-12 md:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-16"
+          className="text-center mb-8 md:mb-14"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            How It Works
+          <h2 id="how-heading" className="text-3xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            How AI Skin Analysis Works
           </h2>
           <p className="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
-            Our platform uses cutting-edge AI to provide early insights into potential skin conditions. Follow these simple steps.
+            Get a skin health report in under a minute — no account, no waiting room. Just follow these five steps.
           </p>
         </motion.div>
 
-        <div className="relative h-[460px] md:h-[500px] overflow-hidden rounded-2xl">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={idx}
-              variants={slide}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="absolute inset-0"
+        <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {steps.map((s, i) => (
+            <motion.li
+              key={s.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="bg-white border border-blue-100 rounded-2xl shadow-lg overflow-hidden flex flex-col"
             >
-              <div className="bg-white border-2 border-blue-200 rounded-2xl shadow-xl h-full flex flex-col md:flex-row overflow-hidden">
-                {/* Image — priority only on first slide */}
-                <div className="flex-shrink-0 w-full md:w-2/5 h-52 md:h-full relative overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100">
-                  <Image
-                    src={s.image}
-                    alt={s.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    priority={idx === 0}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent md:bg-gradient-to-r" />
-
-                  {/* Step badge */}
-                  <div className="absolute top-4 left-4 z-10 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-full w-14 h-14 flex items-center justify-center font-bold text-xl shadow-xl">
-                    {s.step}
-                  </div>
-
-                  {/* Faded icon */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-7xl opacity-20 pointer-events-none">
-                    {s.icon}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 flex flex-col justify-center p-6 md:p-10">
-                  <h3 className="text-2xl md:text-4xl font-bold mb-4 text-gray-800">{s.title}</h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed">{s.description}</p>
-
-                  {/* Progress */}
-                  <div className="mt-6 flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-400">Step {idx + 1} / {steps.length}</span>
-                    <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                      <motion.div
-                        key={idx}
-                        initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
-                        transition={{ duration: 4.5, ease: 'linear' }}
-                        className="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
-                      />
-                    </div>
-                  </div>
-                </div>
+              <div className="relative h-44 bg-gradient-to-br from-blue-100 to-purple-100">
+                <Image src={s.image} alt={s.alt} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                <span className="absolute top-3 left-3 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-lg">
+                  {i + 1}
+                </span>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Dots */}
-        <div className="flex justify-center gap-2 mt-6">
-          {steps.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === idx
-                  ? 'w-10 bg-gradient-to-r from-blue-600 to-purple-600 shadow'
-                  : 'w-2 bg-gray-300 hover:bg-gray-400'
-              }`}
-              aria-label={`Go to step ${i + 1}`}
-            />
+              <div className="p-6 flex-1">
+                <h3 className="text-xl font-bold mb-2 text-gray-800">{s.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm md:text-base">{s.description}</p>
+              </div>
+            </motion.li>
           ))}
-        </div>
+          <li className="rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 text-white p-8 flex flex-col justify-center items-start shadow-lg">
+            <p className="text-2xl font-bold mb-2">Ready to check your skin?</p>
+            <p className="text-blue-100 mb-6">It is free and takes less than a minute.</p>
+            <Link href="/analyze" className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+              Start Skin Analysis
+            </Link>
+          </li>
+        </ol>
 
-        {/* Prev / Next */}
-        <div className="hidden md:flex justify-between mt-4 px-1">
-          <button
-            onClick={() => setIdx(i => (i - 1 + steps.length) % steps.length)}
-            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-md transition-all"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <button
-            onClick={() => setIdx(i => (i + 1) % steps.length)}
-            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-md transition-all"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-          </button>
+        <div className="mt-10 bg-yellow-50 border-l-4 border-yellow-400 p-3 md:p-4 rounded-lg max-w-3xl mx-auto">
+          <p className="text-xs md:text-sm text-gray-700">
+            <strong className="text-yellow-800">Important:</strong> This tool supports skin health awareness and is not a
+            replacement for a professional medical diagnosis. Always consult a qualified dermatologist.
+          </p>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-8 text-center"
-        >
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 md:p-4 rounded-lg max-w-3xl mx-auto">
-            <p className="text-xs md:text-sm text-gray-700">
-              <strong className="text-yellow-800">Important:</strong> This system is designed to support awareness and is not a replacement for professional medical diagnosis. Always consult a qualified healthcare provider for accurate diagnosis and treatment.
-            </p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

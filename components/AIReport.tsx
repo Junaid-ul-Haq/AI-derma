@@ -2,29 +2,30 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { FaFileMedical, FaCheckCircle, FaExclamationTriangle, FaUserMd } from 'react-icons/fa';
 
 const AIReport: React.FC = () => {
   const reportFeatures = [
     {
-      title: 'Possible Conditions',
-      items: ['Condition 1 (Probability: XX%)', 'Condition 2 (Probability: XX%)', 'Condition 3 (Probability: XX%)'],
+      title: 'AI Result',
+      items: ['Most likely condition, e.g. Eczema', 'Top 3 possibilities with AI confidence scores', 'Risk level: Low, See a Doctor or See a Dermatologist Soon'],
       icon: FaFileMedical,
     },
     {
       title: 'Recommended Actions',
-      items: ['Consult a dermatologist for accurate diagnosis', 'Monitor symptoms and keep area clean', 'Avoid self-medication'],
+      items: ['Condition-specific next steps', 'Common signs to watch for (e.g. the ABCDE rule)', 'When to see a dermatologist'],
       icon: FaCheckCircle,
     },
     {
-      title: 'Precautions',
-      items: ['This is not a medical diagnosis', 'Always seek professional medical advice for skin conditions', 'Follow up with healthcare providers'],
+      title: 'Your Details & Records',
+      items: ['Your body area, duration and symptoms', 'Report ID and date for your records', 'Clear medical disclaimer'],
       icon: FaExclamationTriangle,
     },
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section id="sample-report" aria-labelledby="sample-report-heading" className="py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -33,11 +34,11 @@ const AIReport: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            AI Health Report Sample
+          <h2 id="sample-report-heading" className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Sample AI Skin Health Report
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Get comprehensive, AI-generated health reports with detailed analysis and actionable insights
+            Here is what your free report includes. Download it as a PDF and share it with your dermatologist.
           </p>
         </motion.div>
 
@@ -55,7 +56,7 @@ const AIReport: React.FC = () => {
                 <FaFileMedical className="w-8 h-8" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-center">AI-Generated Health Report</h3>
+            <h3 className="text-2xl font-bold text-center">AI Skin Health Report</h3>
             <p className="text-center text-blue-100 mt-2">Comprehensive Analysis & Recommendations</p>
           </div>
 
@@ -126,9 +127,12 @@ const AIReport: React.FC = () => {
                   <FaUserMd className="w-6 h-6 text-blue-600 mr-2" />
                   <p className="font-semibold text-gray-800">Ready to get started?</p>
                 </div>
-                <p className="text-gray-600 text-sm">
-                  Upload your skin image and describe your symptoms to receive your personalized AI health report
+                <p className="text-gray-600 text-sm mb-4">
+                  Upload or take a photo of your skin to receive your personalised AI skin health report
                 </p>
+                <Link href="/analyze" className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:from-blue-700 hover:to-purple-700 transition-all">
+                  Generate My Free Report
+                </Link>
               </div>
             </motion.div>
           </div>

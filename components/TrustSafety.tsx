@@ -12,13 +12,13 @@ const TrustSafety: React.FC = () => {
   const trustPoints = [
     {
       title: 'Data Privacy',
-      description: 'Your personal and health data is encrypted and stored securely. We follow HIPAA-style privacy standards to protect your information.',
+      description: 'There are no accounts and no database. Your skin photo is analysed in memory and discarded straight away — nothing is saved.',
       icon: FaLock,
       color: 'from-blue-500 to-cyan-500',
     },
     {
       title: 'Security First',
-      description: 'We use industry-standard security measures to ensure your data remains confidential and protected from unauthorized access.',
+      description: 'Images are sent over a secure connection only to our AI model. Your optional symptom notes never leave your browser.',
       icon: FaShieldAlt,
       color: 'from-green-500 to-emerald-500',
     },
@@ -52,7 +52,7 @@ const TrustSafety: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <section aria-labelledby="trust-heading" className="py-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="container mx-auto px-4 max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -61,11 +61,11 @@ const TrustSafety: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 id="trust-heading" className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Trust & Safety
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Your privacy and security are our top priorities. We're committed to protecting your data and providing transparent, reliable services.
+            Your privacy comes first. We are transparent about what the AI can and cannot do.
           </p>
         </motion.div>
 
@@ -86,7 +86,7 @@ const TrustSafety: React.FC = () => {
                 className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
               >
                 <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${point.color} flex items-center justify-center mb-6 shadow-lg`}>
-                  <IconComponent className="w-8 h-8 text-white" />
+                  <IconComponent className="w-8 h-8 text-white" aria-hidden="true" />
                 </div>
                 
                 <h3 className="text-xl font-bold mb-4 text-gray-800">{point.title}</h3>

@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# archived code removed from the app (panels, auth, database)
+/_archive
+
+# trained AI model (too large for GitHub — share separately)
+/backend/*.keras
+/backend/*.h5

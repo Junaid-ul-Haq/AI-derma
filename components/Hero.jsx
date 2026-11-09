@@ -1,17 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const images = [
-  { src: '/hero/female-patient-visits-cosmetology-doctor.jpg', alt: 'Patient visiting dermatology doctor' },
-  { src: '/hero/accompaniment-abortion-process.jpg',           alt: 'Medical consultation' },
+  { src: '/hero/ai-skin-analysis-dermatology.jpg', alt: 'Patient discussing skin health with a dermatologist in a skin clinic' },
+  { src: '/hero/dermatology-skin-consultation.jpg', alt: 'Doctor examining the skin on a patient\'s arm during a consultation' },
 ];
 
 const Hero = () => {
-  const router = useRouter();
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -20,11 +18,12 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section aria-labelledby="hero-heading" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background images — Next.js Image for automatic WebP + optimisation */}
       {images.map((img, i) => (
         <div
           key={img.src}
+          aria-hidden={i !== current}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
             i === current ? 'opacity-100' : 'opacity-0'
           }`}
@@ -41,28 +40,32 @@ const Hero = () => {
       ))}
 
       {/* Dark overlay for text legibility */}
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-black/40" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-white drop-shadow-2xl">
-          AI-Powered Dermatology
+        <p className="inline-block mb-5 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur text-white text-xs sm:text-sm font-semibold uppercase tracking-widest">
+          Free · No sign-up · Results in seconds
+        </p>
+        <h1 id="hero-heading" className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white drop-shadow-2xl max-w-5xl mx-auto leading-tight">
+          AI Skin Disease Detection &amp; Instant Skin Health Reports
         </h1>
-        <p className="text-xl md:text-2xl lg:text-3xl mb-10 text-white/90 drop-shadow-lg max-w-3xl mx-auto">
-          An integrated AI and tele-medicine system for fast, reliable, and accessible dermatological care.
+        <p className="text-lg md:text-2xl mb-10 text-white/90 drop-shadow-lg max-w-3xl mx-auto">
+          Upload a photo from your gallery or take one with your camera. Our AI checks it for 21 skin conditions —
+          from acne and eczema to skin cancer — and gives you a report you can download and share with your dermatologist.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => router.push('/upload')}
+          <Link
+            href="/analyze"
             className="bg-white text-blue-600 px-10 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all hover:scale-105 shadow-xl"
           >
-            Start Skin Scan
-          </button>
+            Analyze My Skin — Free
+          </Link>
           <Link
-            href="/auth/signin"
+            href="/#sample-report"
             className="bg-transparent border-2 border-white text-white px-10 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all hover:scale-105 shadow-xl text-center"
           >
-            Book Consultation
+            See a Sample Report
           </Link>
         </div>
       </div>
@@ -76,7 +79,7 @@ const Hero = () => {
             className={`h-2 rounded-full transition-all duration-300 ${
               i === current ? 'w-8 bg-white' : 'w-2 bg-white/50'
             }`}
-            aria-label={`Slide ${i + 1}`}
+            aria-label={`Show background image ${i + 1}`}
           />
         ))}
       </div>
